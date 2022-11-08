@@ -2,6 +2,7 @@ from errors import BadPoints
 from request import Request
 from shop import Shop
 from store import Store
+from utils import list_message
 
 
 def users_message():
@@ -28,7 +29,8 @@ def users_message():
 if __name__ == "__main__":
     storages = {1: 'склад',
                 2: 'магазин'}
-    shop_dict = {'шоколад': 2}
+    shop_dict = {'шоколад': 2,
+                 'яблоко': 5}
     user_request = Request(users_message(), storages)
     move_request = {user_request.product: user_request.amount}
     shop = Shop(shop_dict)
@@ -38,20 +40,16 @@ if __name__ == "__main__":
     if user_request.departure == storages[1] and user_request.departure != user_request.arrival:
         store.remove(user_request.product, user_request.amount)
         shop.add(user_request.product, user_request.amount)
-        store.get_items()
-        store.get_free_space()
-        store.get_unique_items_count()
-        shop.get_items()
-        shop.get_free_space()
-        shop.get_unique_items_count()
+        print('На складе')
+        list_message(store.get_items())
+        print('В магазине')
+        list_message(shop.get_items())
     elif user_request.departure == storages[2] and user_request.departure != user_request.arrival:
         shop.remove(user_request.product, user_request.amount)
         store.add(user_request.product, user_request.amount)
-        shop.get_items()
-        shop.get_free_space()
-        shop.get_unique_items_count()
-        store.get_items()
-        store.get_free_space()
-        store.get_unique_items_count()
+        print('В магазине')
+        list_message(shop.get_items())
+        print('На складе')
+        list_message(store.get_items())
     else:
         raise BadPoints('Некорректные пути отправления/получения')

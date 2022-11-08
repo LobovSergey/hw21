@@ -9,7 +9,7 @@ class Store(Storage):
         self._capacity = capacity
 
     def __repr__(self):
-        return f"Операция {self._items.keys()} {self._items.values()} шт на Складе емкостью {self._capacity}"
+        return f"Операция Склад"
 
     def add(self, title, qnt):
         if self.get_free_space() > qnt:
@@ -18,6 +18,7 @@ class Store(Storage):
             else:
                 self._items[title] += qnt
                 self._capacity += qnt
+            print(f'Курьер доставил {qnt} {title} на склад')
         else:
             print('Недостаточно места на складе')
 
@@ -28,6 +29,7 @@ class Store(Storage):
             if self._items[title] >= qnt:
                 self._items[title] -= qnt
                 self._capacity -= qnt
+                print(f'Курьер забрал {qnt} {title} со склада')
             else:
                 raise NotEnoughAmount(f'Не хватает {title} в свободном доступе')
 
