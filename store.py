@@ -26,12 +26,12 @@ class Store(Storage):
         if self.get_free_space() < qnt:
             NotEnoughAmount(f'Не хватает места в свободном доступе')
         else:
-            if self._items[title] >= qnt:
+            if title not in self._items or self._items[title] < qnt:
+                raise NotEnoughAmount(f'Не хватает {title} в свободном доступе или отсутствует на складе')
+            else:
                 self._items[title] -= qnt
                 self._capacity -= qnt
                 print(f'Курьер забрал {qnt} {title} со склада')
-            else:
-                raise NotEnoughAmount(f'Не хватает {title} в свободном доступе')
 
     def get_free_space(self):
         return self._capacity - sum(self._items.values())
