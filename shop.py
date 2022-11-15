@@ -1,4 +1,5 @@
 from abstract_storage import Storage
+from errors import NotEnoughAmount
 
 
 class Shop(Storage):
@@ -25,11 +26,14 @@ class Shop(Storage):
 
     def remove(self, title, qnt):
         if self.get_free_space() < qnt:
-            print(f'Недостаточно {title} на складе, попробуйте заказать меньше')
+            raise NotEnoughAmount(f'Не хватает места в свободном доступе')
         else:
-            self._items[title] -= qnt
-            self._capacity -= qnt
-            print(f'Курьер забрал {qnt} {title} из магазина')
+            if title not in self._items or self._items[title] < qnt:
+                raise NotEnoughAmount(f'Не хватает {title} в свободном доступе или отсутствует на складе')
+            else:
+                self._items[title] -= qnt
+                self._capacity -= qnt
+                print(f'Курьер забрал {qnt} {title} со склада')
 
     def get_free_space(self):
         return self._capacity - sum(self._items.values())
